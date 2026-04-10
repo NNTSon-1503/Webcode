@@ -121,7 +121,7 @@ void setup() {
   SPI.begin(SCK_PIN, MISO_PIN, MOSI_PIN, SS_PIN); 
   mfrc522.PCD_Init();
   mfrc522.PCD_DumpVersionToSerial();
-  Serial.println("He thong AGV da san sang!");
+  Serial.println("{\"type\":\"log\", \"msg\":\"He thong AGV da san sang!\"}");
 }
 
 
@@ -140,17 +140,17 @@ void loop() {
     card_UID.toUpperCase(); 
 
     // In ra Serial để kiểm tra mã thẻ thực tế
-    Serial.print("Da quet the: ["); Serial.print(card_UID); Serial.println("]");
+    Serial.print("{\"type\":\"rfid\", \"uid\":\""); Serial.print(card_UID); Serial.println("\"}");
 
     if (card_UID == "98B1F3E3") {
       agv_state = 1; 
       stop_start_time = millis(); 
-      Serial.println("-> LENH: Dung 5 giay");
+      Serial.println("{\"type\":\"action\", \"msg\":\"Dung 5 giay\"}");
     } 
    
     else if (card_UID == "985BC7E3") {
       agv_state = 2; 
-      Serial.println("-> LENH: Dung han");
+      Serial.println("{\"type\":\"action\", \"msg\":\"Dung han\"}");
     }
     mfrc522.PICC_HaltA(); 
   }
@@ -171,7 +171,7 @@ void loop() {
     // --- BƯỚC 2: Cập nhật trạng thái xe ---
     if (agv_state == 1) { 
       if (millis() - stop_start_time >= PAUSE_TIME) {
-        agv_state = 0; Serial.println("Het 5s. Chay tiep!");
+        agv_state = 0; Serial.println("{\"type\":\"log\", \"msg\":\"Het 5s. Chay tiep!\"}");
       } else {
         base_speed = 0; 
       }
@@ -220,12 +220,14 @@ void loop() {
     // --- BƯỚC 5: Xuất tín hiệu PWM ---
     setMotorsPWM(pwm_out_L, pwm_out_R);
 
-    // --- In thông số test (Mở Serial Monitor để xem) ---
-     //Bỏ comment đoạn này nếu muốn xem đồ thị tốc độ
-    //Serial.print("Set_L:"); Serial.print(target_vel_L); Serial.print(",");
-    //Serial.print("Act_L:"); Serial.print(actual_vel_L); Serial.print(",");
-    //Serial.print("Set_R:"); Serial.print(target_vel_R); Serial.print(",");
-    //Serial.print("Act_R:"); Serial.println(actual_vel_R);
+    // --- In thông số qua Serial dạng JSON cho Web Dashboard ---
+    // Gửi dữ liệu theo chu kỳ qua JSON
+    Serial.print("{\"type\":\"telemetry\", \"state\":"); Serial.print(agv_state);
+    Serial.print(", \"target_L\":"); Serial.print(target_vel_L);
+    Serial.print(", \"actual_L\":"); Serial.print(actual_vel_L);
+    Serial.print(", \"target_R\":"); Serial.print(target_vel_R);
+    Serial.print(", \"actual_R\":"); Serial.print(actual_vel_R);
+    Serial.println("}");
     
   }
 }

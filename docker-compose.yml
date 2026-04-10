@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  agv-dashboard:
+    build: .
+    container_name: agv_dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - AGV_SERIAL_PORT=${AGV_SERIAL_PORT:-/dev/ttyUSB0}
+      - AGV_BAUD_RATE=${AGV_BAUD_RATE:-115200}
+    
+    # -------------------------------------------------------------
+    # IMPORTANT: SERIAL PORT MAPPING
+    # -------------------------------------------------------------
+    # On Linux/Raspberry Pi/Mac, you must pass the device directly:
+    devices:
+      - "${AGV_SERIAL_PORT:-/dev/ttyUSB0}:${AGV_SERIAL_PORT:-/dev/ttyUSB0}"
+    
+    # On Windows natively running Docker Desktop, mapping COM ports is tricky.
+    # The container won't see COM3 via 'devices' block easily.
+    # Workaround for Windows:
+    # 1. Use WSL2 and attach the USB using 'usbipd' (usbipd wsl attach --busid X-X)
+    # 2. Inside WSL2, the device shows up as /dev/ttyUSB0.
+    # 3. Then run docker-compose up from within the WSL2 terminal.
+    # -------------------------------------------------------------

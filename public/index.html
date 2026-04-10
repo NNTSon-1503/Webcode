@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGV Telemetry Dashboard</title>
+    <!-- Use Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fa-solid fa-robot"></i>
+                <h1>AGV Command Center</h1>
+            </div>
+            <div class="connection-status">
+                <div class="status-dot disconnected" id="connection-dot"></div>
+                <span id="connection-text">Connecting...</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+            
+            <!-- Left Column: Vital Stats & System State -->
+            <div class="column">
+                <div class="glass-card state-card">
+                    <h2><i class="fa-solid fa-microchip"></i> System State</h2>
+                    <div class="state-display" id="agv-state-display">
+                        <h2>UNKNOWN</h2>
+                        <p>Waiting for telemetry...</p>
+                    </div>
+                </div>
+
+                <div class="glass-card log-card">
+                    <h2><i class="fa-solid fa-terminal"></i> Event Logs</h2>
+                    <div class="terminal" id="terminal-container">
+                        <ul id="log-list">
+                            <li>[System] Dashboard Initialized</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Motors & Telemetry -->
+            <div class="column">
+                <div class="glass-card telemetry-card">
+                    <h2><i class="fa-solid fa-gauge-high"></i> Motor Telemetry</h2>
+                    <div class="motors-container">
+                        <!-- Left Motor -->
+                        <div class="motor">
+                            <h3>Left Motor (RPM)</h3>
+                            <div class="speed-rings">
+                                <div class="outer-ring left-ring">
+                                    <div class="speed-value" id="act-left">0</div>
+                                </div>
+                            </div>
+                            <div class="target-speed">Target: <span id="tgt-left">0</span></div>
+                        </div>
+                        
+                        <!-- Right Motor -->
+                        <div class="motor">
+                            <h3>Right Motor (RPM)</h3>
+                            <div class="speed-rings">
+                                <div class="outer-ring right-ring">
+                                    <div class="speed-value" id="act-right">0</div>
+                                </div>
+                            </div>
+                            <div class="target-speed">Target: <span id="tgt-right">0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rfid-card">
+                    <h2><i class="fa-solid fa-id-card"></i> RFID Scanner</h2>
+                    <div class="rfid-display">
+                        <div class="rfid-icon">
+                            <i class="fa-solid fa-wifi"></i>
+                        </div>
+                        <div class="rfid-info">
+                            <h3>Last Scanned Card</h3>
+                            <div class="rfid-uid" id="last-rfid">NO CARD SCANNED</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

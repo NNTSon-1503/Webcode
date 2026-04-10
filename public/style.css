@@ -1,0 +1,323 @@
+:root {
+    --bg-dark: #0f172a;
+    --acc-blue: #3b82f6;
+    --acc-cyan: #06b6d4;
+    --acc-green: #10b981;
+    --acc-red: #ef4444;
+    --acc-yellow: #f59e0b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Effects */
+.background-effects {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    animation: float 10s infinite alternate linear;
+}
+
+.glow-1 {
+    top: -100px;
+    left: -100px;
+    background: var(--acc-blue);
+}
+
+.glow-2 {
+    bottom: -100px;
+    right: -100px;
+    background: var(--acc-cyan);
+    animation-delay: -5s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* Main Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: var(--acc-cyan);
+}
+
+.logo h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.status-dot.connected { color: var(--acc-green); background-color: var(--acc-green); }
+.status-dot.disconnected { color: var(--acc-red); background-color: var(--acc-red); }
+
+/* Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 800px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+}
+
+.glass-card h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-main);
+}
+
+.glass-card h2 i {
+    color: var(--acc-blue);
+}
+
+/* State Display */
+.state-display {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.state-display h2 {
+    font-size: 2.5rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+}
+
+.state-display p {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.state-display.running h2 { color: var(--acc-green); text-shadow: 0 0 20px var(--acc-green); }
+.state-display.paused h2 { color: var(--acc-yellow); text-shadow: 0 0 20px var(--acc-yellow); }
+.state-display.stopped h2 { color: var(--acc-red); text-shadow: 0 0 20px var(--acc-red); }
+
+/* Terminal Logs */
+.terminal {
+    background: #000;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 250px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #a3be8c;
+    border: 1px solid #333;
+}
+
+.terminal ul {
+    list-style: none;
+}
+
+.terminal li {
+    margin-bottom: 0.4rem;
+    border-bottom: 1px solid #111;
+    padding-bottom: 0.2rem;
+}
+.terminal li .timestamp {
+    color: #888;
+    margin-right: 0.5rem;
+}
+
+/* Motors */
+.motors-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.motor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.motor h3 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.speed-rings {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: conic-gradient(var(--glass-border) 100%, transparent 0);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    margin-bottom: 1rem;
+}
+
+.outer-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    /* Default state, will be overridden by JS conic-gradient */
+    background: conic-gradient(var(--acc-blue) 0%, transparent 0%);
+    mask: radial-gradient(transparent 55%, black 55%);
+    -webkit-mask: radial-gradient(transparent 55%, black 55%);
+    transition: background 0.1s linear;
+}
+
+.speed-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    z-index: 2;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.target-speed {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.3);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+}
+.target-speed span {
+    color: var(--acc-cyan);
+    font-style: italic;
+}
+
+
+/* RFID Scanner */
+.rfid-display {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(0,0,0,0.2);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.rfid-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--acc-cyan);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+.rfid-info h3 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.rfid-uid {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: var(--text-main);
+}
