@@ -44,6 +44,15 @@
                     </div>
                 </div>
 
+                <div class="glass-card control-card">
+                    <h2><i class="fa-solid fa-gamepad"></i> Control Panel</h2>
+                    <div class="control-buttons">
+                        <button id="btn-start" class="btn btn-success" style="background:#10b981; color:white;"><i class="fa-solid fa-play"></i> START CAUTIOUSLY</button>
+                        <button id="btn-stop" class="btn btn-warning"><i class="fa-solid fa-hand"></i> NORMAL STOP</button>
+                        <button id="btn-estop" class="btn btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> E-STOP</button>
+                    </div>
+                </div>
+
                 <div class="glass-card log-card">
                     <h2><i class="fa-solid fa-terminal"></i> Event Logs</h2>
                     <div class="terminal" id="terminal-container">
@@ -95,8 +104,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="glass-card map-card" style="margin-top:20px;">
+                    <h2><i class="fa-solid fa-map-location-dot"></i> Live Odometry Map</h2>
+                    <div class="map-container" id="map-container">
+                        <canvas id="map-canvas"></canvas>
+                        <div id="agv-marker" class="agv-marker">
+                            <div class="agv-arrow"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

@@ -1,28 +1,37 @@
 version: '3.8'
 
 services:
-  agv-dashboard:
-    build: .
-    container_name: agv_dashboard
-    restart: unless-stopped
+  agv-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agv-websocket-server
     ports:
       - "3000:3000"
     environment:
+      - NODE_ENV=production
       - PORT=3000
-      - AGV_SERIAL_PORT=${AGV_SERIAL_PORT:-/dev/ttyUSB0}
-      - AGV_BAUD_RATE=${AGV_BAUD_RATE:-115200}
-    
-    # -------------------------------------------------------------
-    # IMPORTANT: SERIAL PORT MAPPING
-    # -------------------------------------------------------------
-    # On Linux/Raspberry Pi/Mac, you must pass the device directly:
-    devices:
-      - "${AGV_SERIAL_PORT:-/dev/ttyUSB0}:${AGV_SERIAL_PORT:-/dev/ttyUSB0}"
-    
-    # On Windows natively running Docker Desktop, mapping COM ports is tricky.
-    # The container won't see COM3 via 'devices' block easily.
-    # Workaround for Windows:
-    # 1. Use WSL2 and attach the USB using 'usbipd' (usbipd wsl attach --busid X-X)
-    # 2. Inside WSL2, the device shows up as /dev/ttyUSB0.
-    # 3. Then run docker-compose up from within the WSL2 terminal.
-    # -------------------------------------------------------------
+      - AGV_SERIAL_PORT=COM3
+      - AGV_BAUD_RATE=115200
+    volumes:
+      - ./public:/app/public
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - agv-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+networks:
+  agv-network:
+    driver: bridge
+
+# Usage:
+# docker-compose up              # Run containers
+# docker-compose down            # Stop containers
+# docker-compose logs -f         # View logs
+# docker-compose build --no-cache # Rebuild image

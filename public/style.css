@@ -96,6 +96,7 @@ body {
     letter-spacing: 2px;
     background: linear-gradient(90deg, var(--acc-cyan), var(--acc-blue));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -320,4 +321,118 @@ body {
     font-weight: bold;
     letter-spacing: 2px;
     color: var(--text-main);
+}
+
+/* Control Buttons */
+.control-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+.btn {
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex: 1;
+    justify-content: center;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-warning {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: var(--acc-yellow);
+    border: 1px solid var(--acc-yellow);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+
+.btn-warning:hover {
+    background-color: var(--acc-yellow);
+    color: #000;
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.6);
+}
+
+.btn-danger {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--acc-red);
+    border: 1px solid var(--acc-red);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+    animation: pulse-danger 2s infinite;
+}
+
+.btn-danger:hover {
+    background-color: var(--acc-red);
+    color: #fff;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8);
+    animation: none;
+}
+
+@keyframes pulse-danger {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
+
+/* ==========================================================
+   Map Feature Styles
+   ========================================================== */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+#map-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.agv-marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--acc-green);
+    border-radius: 4px;
+    box-shadow: 0 0 15px var(--acc-green);
+    /* Tọa độ tâm để quay marker chính xác */
+    transform-origin: center center;
+    z-index: 2;
+    /* Di chuyển mượt mà */
+    transition: transform 0.1s linear; 
+}
+
+.agv-arrow {
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 12px solid #fff;
+    position: absolute;
+    top: 6px;
+    left: 8px; /* Mũi tên chỉ về bên phải (trục X) */
 }

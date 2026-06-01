@@ -1,23 +1,36 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+# Build stage
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Runtime stage
+FROM node:18-alpine
+WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Install necessary tools
+RUN apk add --no-cache dumb-init
+
+# Copy node_modules from builder
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy application code
+COPY server.js .
+COPY public ./public
+COPY agv_websocket.ino .
 COPY package*.json ./
 
-# Install python and build essentials for serialport native compilation if needed
-RUN apk add --no-cache python3 make g++ linux-headers eudev-dev
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+USER nodejs
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application
-COPY . .
-
-# Expose the port the app runs on
+# Expose port
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "start"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "server.js"]
